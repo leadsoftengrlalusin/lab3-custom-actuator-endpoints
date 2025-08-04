@@ -24,6 +24,9 @@ dependencies {
 	implementation 'com.h2database:h2'
 	implementation 'org.apache.groovy:groovy'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.glassfish.jersey.containers:jersey-container-servlet-core:3.1.5'
+	implementation 'org.glassfish.jersey.core:jersey-server:3.1.5'
+	implementation 'org.glassfish.jersey.inject:jersey-hk2:3.1.5'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
@@ -32,3 +35,13 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += ["-parameters"]
+}
+
+tasks.withType(GroovyCompile) {
+	groovyOptions.javaAnnotationProcessing = true
+	options.compilerArgs += ["-parameters"]
+}
+

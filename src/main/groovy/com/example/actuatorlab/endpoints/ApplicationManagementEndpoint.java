@@ -3,6 +3,8 @@ package com.example.actuatorlab.endpoints;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
+import org.springframework.boot.actuate.endpoint.annotation.Selector;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -32,14 +34,20 @@ public class ApplicationManagementEndpoint {
     }
 
     @WriteOperation
-    public void setMaintenanceMode(boolean enabled) {
-        this.maintenanceMode = enabled;
-    }
-
-    @WriteOperation
-    public void updateConfiguration(String key, String value) {
-        if (key != null && value != null) {
-            configuration.put(key, value);
+    public void update(
+            @Selector String action,
+            @Nullable Boolean enabled,
+            @Nullable String key,
+            @Nullable String value
+    ) {
+        if ("maintenance".equalsIgnoreCase(action)) {
+            if (enabled != null) {
+                this.maintenanceMode = enabled;
+            }
+        } else if ("config".equalsIgnoreCase(action)) {
+            if (key != null && value != null) {
+                configuration.put(key, value);
+            }
         }
     }
 }
